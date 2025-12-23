@@ -275,7 +275,7 @@ pygame.display.set_caption("Super Neko World")
 clock = pygame.time.Clock()
 font = pygame.font.Font("C:/Windows/Fonts/msgothic.ttc", 32)
 
-game_state = "title"
+game_state: str = "title"
 
 def reset_game():
     global all_sprites, enemies, fish_group, player, fish_total, map_rects, goal_rect, MAP, MAP_WIDTH, MAP_HEIGHT
@@ -329,6 +329,12 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:  # ESCで一時停止／再開
+            if game_state == "playing":
+                game_state = "pause"
+            elif game_state == "pause":
+                game_state = "playing"
+
         if game_state == "title":
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 reset_game()
@@ -404,6 +410,19 @@ while True:
             screen.blit(txt, (SCREEN_WIDTH//2 - txt.get_width()//2, 220))
             txt2 = font.render("スペースキーでタイトルへ", True, (0,0,0))
             screen.blit(txt2, (SCREEN_WIDTH//2 - txt2.get_width()//2, 260))
+        if game_state == "pause":
+            pause_txt = font.render("PAUSE", True, (0, 0, 0))
+            info_txt = font.render("ESCで再開", True, (0, 0, 0))
+
+            screen.blit(
+                pause_txt,
+                (SCREEN_WIDTH // 2 - pause_txt.get_width() // 2, 200)
+            )
+            screen.blit(
+                info_txt,
+                (SCREEN_WIDTH // 2 - info_txt.get_width() // 2, 250)
+            )
+
 
     pygame.display.update()
     clock.tick(60)
